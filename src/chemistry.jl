@@ -1,6 +1,7 @@
 module Chemistry
 
 using JSON 
+using Unitful 
 
 # --------------------------------------------------------------------
 # Load data and prepare it a bit ... 
@@ -9,10 +10,18 @@ const ase_data_path = joinpath(@__DIR__(), "..", "data", "asedata.json")
 
 const ase_data = JSON.parsefile(ase_data_path)
 
-const _rnn = [Float64(d) for d in ase_data["rnn"]]
-const _masses = [Float64(m) for m in ase_data["masses"]]
+const _rnn = [Float64(d) * u"Å" for d in ase_data["rnn"]]
+const _masses = [Float64(m) * u"u" for m in ase_data["masses"]]
 const _refstates = Dict{String, Any}[ d == nothing ? Dict{String, Any}() : d
                                       for d in ase_data["refstates"]]
+for D in _refstates 
+   if haskey(D, "a")
+      D["a"] *= u"Å"
+   end
+   if haskey(D, "d")
+      D["d"] *= u"Å"
+   end
+end
 
 const _symbols = Dict{Int, Symbol}()
 const _numbers = Dict{Symbol, Int}()
@@ -28,6 +37,7 @@ end
 atomic_number(sym::Symbol) = _numbers[sym]
 
 chemical_symbol(z::Integer) = _symbols[z]
+chemical_symbol(sym::Symbol) = sym
 
 atomic_mass(z::Integer) = _masses[z+1]
 atomic_mass(sym::Symbol) = atomic_mass(atomic_number(sym))
