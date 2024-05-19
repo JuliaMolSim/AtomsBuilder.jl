@@ -28,6 +28,27 @@ _set_position(x::Atom, 𝐫) = Atom(; position = 𝐫,
                                    atomic_number = x.atomic_number, 
                                    atomic_symbol = x.atomic_symbol)
 
+function _get_positions(at::FlexibleSystem)
+   [ x.position for x in at.particles ]
+end
+
+function _set_positions(at::FlexibleSystem, 
+                        X::AbstractVector{SVector{3, T}}) where {T}
+   particles = [ _set_position(at.particles[i], X[i]) 
+                 for i in 1:length(at) ] 
+   return FlexibleSystem(particles, at.bounding_box, at.boundary_conditions)
+end
+
+function _get_atomic_numbers(at::FlexibleSystem)
+   [ x.atomic_number for x in at.particles ]
+end
+
+function _set_atomic_numbers(at::FlexibleSystem, Z::AbstractVector{<: Integer})
+   particles = [ Atom(Z[i], x.position, x.velocity)
+                 for (i, x) in enumerate(at.particles) ]
+   return FlexibleSystem(particles, at.bounding_box, at.boundary_conditions)
+end
+
 
 """
 ```

@@ -42,6 +42,10 @@ See `?bulk` and `?rattle!` for more information.
 
 ## Contributions 
 
-The current version of the package is essentially a copy-paste of a subset of functionality from an older package that is no longer developed. Contributions to expand the capabilities, improve the implementation, or entirely replace it are very welcome. Some packages that contain overlapping functionalities that could replace or add to `AtomsBuilder.jl` include
+The current version of the package is essentially a copy-paste of a subset of functionality from an older package that is no longer developed. I needed this functionality to starting moving over my workflow to the AtomsBase eco-system. Contributions to expand the capabilities, improve the implementation, or entirely replace it are very welcome. There are most certainly more general and more elegant implementations available than what I provide. Some packages that contain overlapping functionalities that could replace or add to `AtomsBuilder.jl` include
 * [`Electrum.jl`](https://github.com/brainandforce/Electrum.jl)
 * [`AtomsToolbox.jl`](https://github.com/rashidrafeek/AtomsToolbox.jl)
+* [`SimpleCrystals.jl`](https://github.com/ejmeitz/SimpleCrystals.jl)
+* [`Packmol.jl`](https://github.com/m3g/Packmol.jl)
+* [`ASEconvert.jl`](https://github.com/mfherbst/ASEconvert.jl)
+
