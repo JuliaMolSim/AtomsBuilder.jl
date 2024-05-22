@@ -1,10 +1,7 @@
-export bulk 
+export bulk
 
 using Unitful: unit 
 using LinearAlgebra: I
-
-using AtomsBuilder.Chemistry: symmetry, lattice_constant, atomic_mass, 
-                 atomic_number, chemical_symbol, refstate
 
 const _unit_cells = Dict(     # (positions, cell matrix, factor of a)
    :fcc => ( [ [0 0 0], ],
@@ -26,12 +23,12 @@ const _simple_structures = [:fcc, :bcc, :diamond]
 
 function _simple_bulk(sym::Symbol, cubic::Bool; a=nothing, T = Float64)
    if cubic
-      X, scal = _cubic_cells[symmetry(sym)]
+      X, scal = _cubic_cells[Chemistry.symmetry(sym)]
       C = Matrix(1.0I, 3, 3) / scal
    else
-      X, C, scal = _unit_cells[symmetry(sym)]
+      X, C, scal = _unit_cells[Chemistry.symmetry(sym)]
    end
-   a === nothing && (a = lattice_constant(sym))
+   a === nothing && (a = Chemistry.lattice_constant(sym))
    TU = typeof( one(T) * unit(a) )
    return [ Vec3{TU}(x * a * scal)  for x in X ], Mat3{TU}(C * a * scal)
 end
@@ -59,14 +56,14 @@ specify the kwargs `a` or `c` to determine the lattice constants.
 """
 function bulk(sym::Symbol; T=Float64, cubic = false, pbc = (true,true,true), 
                            a=nothing, c=nothing) # , x=nothing, y=nothing, z=nothing)
-   symm = symmetry(sym)
+   symm = Chemistry.symmetry(sym)
    if symm in _simple_structures
       X, C = _simple_bulk(sym, cubic; a=a)
    elseif symm == :hcp
       X, C = _bulk_hcp(sym; a=a, c=c)  # cubic parameter is irrelevant for hcp
    end
-   m = atomic_mass(sym)
-   Z = atomic_number(sym)
+   m = Chemistry.atomic_mass(sym)
+   Z = Chemistry.atomic_number(sym)
    nat = length(X)
    at = _flexible_system( X, fill(Z, nat), C, _convert_pbc(pbc))
    # I don't remember what this does so I'm commenting it out until I understand 

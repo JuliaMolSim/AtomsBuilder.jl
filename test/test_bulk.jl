@@ -1,5 +1,5 @@
 
-using AtomsBuilder, Test, AtomsBase
+using AtomsBuilder, Test, AtomsBase, Unitful
 import JuLIP
 
 ##
@@ -38,5 +38,19 @@ end
 
 ##
 
-# not sure how to write a test for this: 
-rattle!(bulk(:C, cubic=true) * (2,3,4), 0.1)
+# not sure how to write a test for this, but at least it should execute
+sys1 = rattle!(bulk(:C, cubic=true) * (2,3,4), 0.1)
+sys2 = rattle!(bulk(:C) * (2,3,4), 0.1)
+
+X = position(sys1)
+Xnew = [ x .+ 0.01u"Å" for x in X ]
+sys3 = set_positions(sys1, Xnew)
+@test position(sys3) == Xnew
+
+Z = atomic_number(sys1)
+@test all(Z .== AtomsBuilder.Chemistry.atomic_number(:C))
+zO = AtomsBuilder.Chemistry.atomic_number(:O)
+Znew = copy(Z); Znew[3:5:end] .= zO
+sys4 = set_elements(sys3, Znew)
+@test all(atomic_number(sys4) .== Znew)
+
