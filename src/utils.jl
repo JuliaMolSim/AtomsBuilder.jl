@@ -1,7 +1,7 @@
 
 using AtomsBase 
 using AtomsBase: Atom, FlexibleSystem, Periodic
-using Unitful: unit, ustrip 
+using Unitful: unit, ustrip, Quantity
 using LinearAlgebra: norm 
 
 export rattle!, 
@@ -93,50 +93,53 @@ import Base.*
 
 
 """
-`rattle!(at, r::Float64) -> at`
+```
+rattle!(sys, r::Union{AbstractFloat, Quantity}) -> at
+```
 
 Randomly perturbs the atom positions within a ball of radius `r`. The perturbation 
 is uniform in angular component, and uniform in radial component. (Note this is 
 not the same as choosing them uniform in cartesian coordinates!). 
+
+If `r` is unitless, then the unit of the system is applied. 
 """
-function rattle!(at::FlexibleSystem, r::AbstractFloat)
+function rattle!(at::FlexibleSystem, r::Quantity)
    for i = 1:length(at.particles)
       p = at.particles[i]
       𝐫ᵢ = p.position 
       T = typeof(ustrip(𝐫ᵢ[1]))
       ui = randn(Vec3{T})
-      p_new = _set_position(p, 𝐫ᵢ + r * ui / norm(ui) * unit(𝐫ᵢ[1]))
+      p_new = _set_position(p, 𝐫ᵢ + r * ui / norm(ui))
       at.particles[i] = p_new
    end
    return at
 end
 
+rattle!(sys::FlexibleSystem, r::AbstractFloat) = 
+      rattle!(sys, r * unit(position(sys)[1][1]))
 
 
-# union(at1::Atoms, at2::Atoms) =
-#    Atoms( X = union(at1.X, at2.X),
-#           P = union(at1.P, at2.P),
-#           M = union(at1.M, at2.M),
-#           Z = union(at1.Z, at2.Z),
-#           cell = cell(at1),
-#           pbc = pbc(at1) )
+"""
+```
+union(sys1::FlexibleSystem, sys2::FlexibleSystem)
+```
+takes the union of two particle systems provided their cells are identical. 
+"""
+function union(sys1::FlexibleSystem, sys2::FlexibleSystem) 
+   @assert boundary_conditions(sys1) == boundary_conditions(sys2)
+   @assert bounding_box(sys1) == bounding_box(sys2)
+   return FlexibleSystem(union(sys1.particles, sys2.particles),  
+                        bounding_box(at), 
+                        boundary_conditions(at) )
+end
 
+"""
+`deleteat!(sys::FlexibleSystem, n) -> sys`:
 
-
-# """
-# `deleteat!(at::Atoms, n) -> at`:
-
-# returns the same atoms object `at`, but with the atom(s) specified by `n`
-# removed.
-# """
-# function Base.deleteat!(at::Atoms, n)
-#    deleteat!(at.X, n)
-#    deleteat!(at.P, n)
-#    deleteat!(at.M, n)
-#    deleteat!(at.Z, n)
-#    update_data!(at, Inf)
-#    JuLIP.reset_clamp!(at)
-#    return at
-# end
-
-
+returns the same `FlexibleSystem`` object `sys`, but with the atom(s) specified by `n`
+removed.
+"""
+function Base.deleteat!(sys::FlexibleSystem, n)
+   deleteat!(sys.particles, n)
+   return sys
+end 

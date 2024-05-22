@@ -6,6 +6,7 @@ version = "0.0.2"
 AtomsBase = "a963bdd2-2df7-4f54-a1ee-49d51e6be12a"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
@@ -13,13 +14,14 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 AtomsBase = "0.3.5"
 JSON = "0.21.4"
 LinearAlgebra = "1.9.0, 1.10.0"
+Random = "1.9.0, 1.10.0"
 StaticArrays = "1.9"
 Unitful = "1.19"
 julia = "1.9.0, 1.10.0"
 
 [extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 JuLIP = "945c410c-986d-556a-acb1-167a618e0462"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Test", "JuLIP"]
