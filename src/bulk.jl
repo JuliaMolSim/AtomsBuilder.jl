@@ -46,6 +46,7 @@ end
 
 _convert_pbc(pbc::NTuple{3, Bool}) = pbc
 _convert_pbc(pbc::Bool) = (pbc, pbc, pbc)
+_convert_pbc(pbc::AbstractVector) = tuple(pbc...)
 
 """
 `bulk(sym)` : generates a `FlexibleSystem` unit cell for a bulk 
