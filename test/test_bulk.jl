@@ -1,12 +1,11 @@
 
 using AtomsBuilder
 using Test, AtomsBase, Unitful, Random, JSON
-# import JuLIP
 
 ##
 
 
-@info("Testing `bulk` and `repeat` against JuLIP reference implementation")
+@info("Testing `bulk` and `repeat` against JuLIP reference data")
 
 test_systems = JSON.parsefile(joinpath(@__DIR__(), "..", "data", "test_systems.json"))
 

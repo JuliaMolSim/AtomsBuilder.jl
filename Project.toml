@@ -1,6 +1,6 @@
 name = "AtomsBuilder"
 uuid = "f5cc8831-eeb7-4288-8d9f-d6c1ddb77004"
-version = "0.1.0"
+version = "0.2.0-dev"
 
 [deps]
 AtomsBase = "a963bdd2-2df7-4f54-a1ee-49d51e6be12a"
@@ -11,7 +11,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
-AtomsBase = "0.3.5, 0.4"
+AtomsBase = "0.4"
 JSON = "0.21.4"
 LinearAlgebra = "1.9.0, 1.10.0"
 Random = "1.9.0, 1.10.0"
@@ -20,7 +20,6 @@ Unitful = "1.19"
 julia = "1.9.0, 1.10.0"
 
 [extras]
-# JuLIP = "945c410c-986d-556a-acb1-167a618e0462"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
