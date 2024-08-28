@@ -1,13 +1,13 @@
 
 using AtomsBase 
-using AtomsBase: Atom, FlexibleSystem, Periodic
+using AtomsBase: Atom, FlexibleSystem
 using Unitful: unit, ustrip, Quantity
 using LinearAlgebra: norm 
 
 export rattle!, 
        set_positions, 
        set_elements, 
-         randz!
+       randz!
 
 """
 Helper function to convert construct a FlexibleSystem from 
@@ -17,20 +17,20 @@ function _flexible_system(positions, elements, cell, pbc)
    Nat = length(positions)
    syms = Chemistry.chemical_symbol.(elements)
    atoms = [ Atom(syms[i], positions[i]) for i in 1:Nat ]
-   bc =  [ (pbc[i] ? Periodic() : nothing) for i = 1:3 ]
-   bb = [cell[i, :] for i = 1:3]   # IS THIS A BUG? SHOULD IT BE cell[:, i] ??? 
+   bc = pbc isa Bool ? (pbc, pbc, pbc) : tuple(pbc...)
+   bb = tuple([cell[i, :] for i = 1:3]...)
    return FlexibleSystem(atoms; 
                          bounding_box = bb, 
-                         boundary_conditions = bc)
+                         periodicity = bc)
 end
 
 _set_position(x::Atom, 𝐫) = Atom(atomic_number(x), 𝐫; 
-                                   velocity = x.velocity,
-                                   atomic_mass = x.atomic_mass)
+                                   velocity = velocity(x),
+                                   mass = mass(x))
 
 _set_element(x::Atom, Z) = Atom(Z, position(x); 
-                                velocity = x.velocity,
-                                atomic_mass = x.atomic_mass)
+                                velocity = velocity(x),
+                                mass = mass(x))
  
 function set_positions(at::FlexibleSystem, 
                        X::AbstractVector{SVector{3, T}}) where {T}
@@ -38,8 +38,8 @@ function set_positions(at::FlexibleSystem,
    particles = [ _set_position(at.particles[i], X[i])
                  for i in 1:length(at) ] 
    return FlexibleSystem(particles, 
-                         bounding_box(at), 
-                         boundary_conditions(at))
+                         bounding_box = bounding_box(at), 
+                         periodicity = periodicity(at))
 end
 
 
@@ -48,8 +48,8 @@ function set_elements(at::FlexibleSystem, Z::AbstractVector)
    particles = [ Atom(Z[i], position(x), velocity(x))
                  for (i, x) in enumerate(at.particles) ]
    return FlexibleSystem(particles, 
-                         bounding_box(at), 
-                         boundary_conditions(at))
+                         bounding_box = bounding_box(at), 
+                         periodicity = periodicity(at))
 end
 
 
@@ -84,8 +84,9 @@ function Base.repeat(at::FlexibleSystem, n::NTuple{3})
       end
    end
 
-   bb = [c1 * n[1], c2 * n[2], c3 * n[3]]
-   return FlexibleSystem(particles, bb, boundary_conditions(at))
+   bb = (c1 * n[1], c2 * n[2], c3 * n[3])
+   return FlexibleSystem(particles; bounding_box = bb, 
+                           periodicity = periodicity(at))
 end
 
 Base.repeat(at::FlexibleSystem, n::Integer) = repeat(at, (n,n,n))
@@ -120,7 +121,7 @@ function rattle!(at::FlexibleSystem, r::Quantity)
 end
 
 rattle!(sys::FlexibleSystem, r::AbstractFloat) = 
-      rattle!(sys, r * unit(position(sys)[1][1]))
+      rattle!(sys, r * unit(position(sys, 1)[1]))
 
 
 """
@@ -168,11 +169,11 @@ union(sys1::FlexibleSystem, sys2::FlexibleSystem)
 takes the union of two particle systems provided their cells are identical. 
 """
 function union(sys1::FlexibleSystem, sys2::FlexibleSystem) 
-   @assert boundary_conditions(sys1) == boundary_conditions(sys2)
+   @assert periodicity(sys1) == periodicity(sys2)
    @assert bounding_box(sys1) == bounding_box(sys2)
    return FlexibleSystem(union(sys1.particles, sys2.particles),  
-                        bounding_box(at), 
-                        boundary_conditions(at) )
+                        bounding_box = bounding_box(at), 
+                        periodicit = periodicity(at) )
 end
 
 """
