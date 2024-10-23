@@ -117,7 +117,7 @@ function rattle!(at::FlexibleSystem, r::Quantity)
       𝐫ᵢ = p.position 
       T = typeof(ustrip(𝐫ᵢ[1]))
       ui = randn(Vec3{T})
-      p_new = _set_position(p, 𝐫ᵢ + rand() * r * ui / norm(ui))
+      p_new = _set_position(p, 𝐫ᵢ + rand(T) * r * ui / norm(ui))
       at.particles[i] = p_new
    end
    return at
