@@ -35,6 +35,7 @@ end
 sys0 = rattle!(bulk(:C, cubic=true) * (2,3,4), 0.1u"Å")
 sys1 = rattle!(bulk(:C, cubic=true) * (2,3,4), 0.1)
 sys2 = rattle!(bulk(:C) * (2,3,4), 0.1)
+rattle!(bulk(:C) * (2,3,4), 0.01u"nm")
 
 X = position(sys1, :)
 Xnew = [ x .+ 0.01u"Å" for x in X ]

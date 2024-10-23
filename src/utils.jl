@@ -1,7 +1,7 @@
 
 using AtomsBase 
 using AtomsBase: Atom, FlexibleSystem
-using Unitful: unit, ustrip, Quantity
+using Unitful: unit, uconvert, ustrip, Quantity
 using LinearAlgebra: norm 
 
 export rattle!, 
@@ -109,6 +109,9 @@ not the same as choosing them uniform in cartesian coordinates!).
 If `r` is unitless, then the unit of the system is applied. 
 """
 function rattle!(at::FlexibleSystem, r::Quantity)
+   (length(at.particles) > 0) || return at
+   at_unit = unit(position(at, 1)[1])
+   r = uconvert(at_unit, r)
    for i = 1:length(at.particles)
       p = at.particles[i]
       𝐫ᵢ = p.position 
