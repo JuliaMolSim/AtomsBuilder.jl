@@ -20,7 +20,7 @@ function _flexible_system(positions, elements, cell, pbc)
    bc = pbc isa Bool ? (pbc, pbc, pbc) : tuple(pbc...)
    bb = tuple([cell[i, :] for i = 1:3]...)
    return FlexibleSystem(atoms; 
-                         bounding_box = bb, 
+                         cell_vectors = bb, 
                          periodicity = bc)
 end
 
@@ -38,7 +38,7 @@ function set_positions(at::FlexibleSystem,
    particles = [ _set_position(at.particles[i], X[i])
                  for i in 1:length(at) ] 
    return FlexibleSystem(particles, 
-                         bounding_box = bounding_box(at), 
+                         cell_vectors = cell_vectors(at), 
                          periodicity = periodicity(at))
 end
 
@@ -48,7 +48,7 @@ function set_elements(at::FlexibleSystem, Z::AbstractVector)
    particles = [ Atom(Z[i], position(x), velocity(x))
                  for (i, x) in enumerate(at.particles) ]
    return FlexibleSystem(particles, 
-                         bounding_box = bounding_box(at), 
+                         cell_vectors = cell_vectors(at), 
                          periodicity = periodicity(at))
 end
 
@@ -72,7 +72,7 @@ at = bulk(:) * (3, 2, 4)
 ```
 """
 function Base.repeat(at::FlexibleSystem, n::NTuple{3})
-   c1, c2, c3 = bounding_box(at)
+   c1, c2, c3 = cell_vectors(at)
 
    particles = eltype(at.particles)[] 
    for a in CartesianIndices( (1:n[1], 1:n[2], 1:n[3]) )
@@ -85,7 +85,7 @@ function Base.repeat(at::FlexibleSystem, n::NTuple{3})
    end
 
    bb = (c1 * n[1], c2 * n[2], c3 * n[3])
-   return FlexibleSystem(particles; bounding_box = bb, 
+   return FlexibleSystem(particles; cell_vectors = bb, 
                            periodicity = periodicity(at))
 end
 
@@ -173,9 +173,9 @@ takes the union of two particle systems provided their cells are identical.
 """
 function union(sys1::FlexibleSystem, sys2::FlexibleSystem) 
    @assert periodicity(sys1) == periodicity(sys2)
-   @assert bounding_box(sys1) == bounding_box(sys2)
+   @assert cell_vectors(sys1) == cell_vectors(sys2)
    return FlexibleSystem(union(sys1.particles, sys2.particles),  
-                        bounding_box = bounding_box(at), 
+                        cell_vectors = cell_vectors(at), 
                         periodicit = periodicity(at) )
 end
 
