@@ -57,11 +57,21 @@ specify the kwargs `a` or `c` to determine the lattice constants.
 """
 function bulk(sym::Symbol; T=Float64, cubic = false, pbc = (true,true,true), 
                            a=nothing, c=nothing) # , x=nothing, y=nothing, z=nothing)
-   symm = Chemistry.symmetry(sym)
+   symm = try
+      Chemistry.symmetry(sym)
+   catch e
+      if e isa KeyError
+         throw(ArgumentError("No symmetry information known for element $sym"))
+      else
+         rethrow()
+      end
+   end
    if symm in _simple_structures
       X, C = _simple_bulk(sym, cubic; a=a)
    elseif symm == :hcp
       X, C = _bulk_hcp(sym; a=a, c=c)  # cubic parameter is irrelevant for hcp
+   else
+      throw(ArgumentError("Currently bulk not immplemented for symmetry $symm"))
    end
    m = Chemistry.atomic_mass(sym)
    Z = Chemistry.atomic_number(sym)
