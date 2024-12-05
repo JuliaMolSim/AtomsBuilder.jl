@@ -27,7 +27,6 @@ for D in test_systems
    end 
    @test compare_system(sys_f, D["sys"])
 end
-        
 
 ##
 
@@ -56,7 +55,5 @@ deleteat!(sys4, 1:5)
 @test atomic_number.(pold[6:end]) == atomic_number(sys4, :)
 
 
-
-
-
-
+@test_throws ArgumentError bulk(:Og)  # Case where no bulk structure is known
+@test_throws ArgumentError bulk(:B)   # Tetragonal, which is currently not implemented
