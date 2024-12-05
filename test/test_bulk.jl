@@ -12,7 +12,7 @@ test_systems = JSON.parsefile(joinpath(@__DIR__(), "..", "data", "test_systems.j
 _ustripvecvec(X) = [ ustrip.(x) for x in X ]
 
 compare_system(sys_f, sys_j) = (
-      all( ustrip.( hcat(bounding_box(sys_f)...) ) .≈ hcat(sys_j["cell"]...)' )  && 
+      all( ustrip.( hcat(cell_vectors(sys_f)...) ) .≈ hcat(sys_j["cell"]...)' )  && 
       all( AtomsBuilder._convert_pbc(sys_j["pbc"]) .== periodicity(sys_f) ) && 
       all( atomic_number(sys_f, :) .== sys_j["Z"] ) && 
       all( _ustripvecvec(position(sys_f, :)) .≈ sys_j["X"] )    )
