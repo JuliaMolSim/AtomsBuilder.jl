@@ -17,11 +17,9 @@ function _flexible_system(positions, elements, cell, pbc)
    Nat = length(positions)
    syms = Chemistry.chemical_symbol.(elements)
    atoms = [ Atom(syms[i], positions[i]) for i in 1:Nat ]
-   bc = pbc isa Bool ? (pbc, pbc, pbc) : tuple(pbc...)
-   bb = tuple([cell[i, :] for i = 1:3]...)
-   return FlexibleSystem(atoms; 
-                         cell_vectors = bb, 
-                         periodicity = bc)
+   return FlexibleSystem(atoms;
+                         cell_vectors=tuple([cell[i, :] for i = 1:3]...),
+                         periodicity=pbc)
 end
 
 _set_position(x::Atom, 𝐫) = Atom(atomic_number(x), 𝐫; 
