@@ -4,7 +4,33 @@ using PubChemCrawler: get_cid, get_for_cids
 
 export load_from_pubchem
 
+"""
+    load_from_pubchem(cid::Int)
+    load_from_pubchem(name::AbstractString)
+    load_from_pubchem(;smiles::AbstractString)
 
+Load a molecule from [PubChem](https://pubchem.ncbi.nlm.nih.gov/).
+
+You can use [PubChemCrawler](https://github.com/JuliaHealth/PubChemCrawler.jl)
+to search for `cid`.
+
+# Example
+```julia
+using AtomsBuilder
+
+# using trivial name
+load_from_pubchem( "water" )
+
+# using CID
+load_from_pubchem( 887 )
+
+# using SMILES
+load_from_pubchem( smiles="CC(=O)C" )
+
+# using CAS number
+load_from_pubchem( "64-17-5" )
+```
+"""
 function load_from_pubchem(cid::Int)
     tmp_name = tempname() * ".sdf"
     open(tmp_name, "w") do io
