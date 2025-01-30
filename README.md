@@ -9,7 +9,7 @@ This package provides utilities to build atomic structures. At the moment the fu
 
 ## Preliminary Documentation 
 
-Currently there are just two exported functions: 
+Currently there are just two exported functions to build materials: 
 * `bulk`
 * `rattle!`
 In addition we overload 
@@ -39,6 +39,27 @@ at5 = rattle!( bulk(:Si, cubic=true) * 3 )
 ```
 
 See `?bulk` and `?rattle!` for more information. 
+
+## PubChem inteface
+
+PubChem interface allows you to download structures from [PubChem](https://pubchem.ncbi.nlm.nih.gov/).
+This is done with `load_from_pubchem` function. You can only load isolated molecules currently.
+
+```julia
+using AtomsBuilder
+
+# using trivial name
+load_from_pubchem( "water" )
+
+# using CID
+load_from_pubchem( 887 )
+
+# using SMILES
+load_from_pubchem( smiles="CC(=O)C" )
+
+# using CAS number
+load_from_pubchem( "64-17-5" )
+```
 
 ## Contributions 
 

@@ -5,6 +5,7 @@ using Test
     # Write your tests here.
     @testset "bulk" begin include("test_bulk.jl"); end
     @testset "utils" begin include("test_utils.jl"); end
+    include("test_pubchem.jl")
 end
 
 

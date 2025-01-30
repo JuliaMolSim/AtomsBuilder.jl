@@ -9,5 +9,6 @@ const Vec3{T} = SVector{3, T}
 include("chemistry.jl")
 include("utils.jl")
 include("bulk.jl")
+include("pubchem.jl")
 
 end
