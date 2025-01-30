@@ -4,7 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaMolSim.github.io/AtomsBuilder.jl/dev/)-->
 [![Build Status](https://github.com/JuliaMolSim/AtomsBuilder.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/JuliaMolSim/AtomsBuilder.jl/actions/workflows/CI.yml?query=branch%3Amain) 
 
-This package provides utilities to build atomic structures. At the moment the functionality is very limited - see examples below. 
+This package provides utilities to build atomic structures. At the moment the functionality is limited - see examples below. The intention is that over time this package becomes the de facto standard for generating structures in the JuliaMolSim ecosystem. Contributions are very welcome.
 
 
 ## Preliminary Documentation 
@@ -40,7 +40,7 @@ at5 = rattle!( bulk(:Si, cubic=true) * 3 )
 
 See `?bulk` and `?rattle!` for more information. 
 
-## PubChem inteface
+## PubChem Interface
 
 PubChem interface allows you to download structures from [PubChem](https://pubchem.ncbi.nlm.nih.gov/).
 This is done with `load_from_pubchem` function. You can only load isolated molecules currently.
@@ -63,7 +63,7 @@ load_from_pubchem( "64-17-5" )
 
 ## Contributions 
 
-The current version of the package is essentially a copy-paste of a subset of functionality from an older package that is no longer developed. I needed this functionality to starting moving over my workflow to the AtomsBase eco-system. Contributions to expand the capabilities, improve the implementation, or entirely replace it are very welcome. There are most certainly more general and more elegant implementations available than what I provide. Some packages that contain overlapping functionalities that could replace or add to `AtomsBuilder.jl` include
+The the package started as a copy-paste of a subset of functionality from an older package that is no longer developed. Contributions to expand the capabilities, improve the implementation, or entirely replace it are very welcome. There are almost certainly more general and more elegant implementations of structure building available than what we currently. Some packages that contain overlapping functionalities that could replace or add to `AtomsBuilder.jl` include
 * [`Electrum.jl`](https://github.com/brainandforce/Electrum.jl)
 * [`AtomsToolbox.jl`](https://github.com/rashidrafeek/AtomsToolbox.jl)
 * [`SimpleCrystals.jl`](https://github.com/ejmeitz/SimpleCrystals.jl)
