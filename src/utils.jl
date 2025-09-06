@@ -1,8 +1,4 @@
 
-
-@deprecate rattle!(sys::CellSystem, r::Union{AbstractFloat, Unitful.length}) rattle_positions!(sys,r)
-
-
 """
    randz!(sys::FlexibleSystem, zlist) -> sys
 
@@ -61,7 +57,11 @@ function random_species!(sys::AbstractSystem, species::AbstractVector, weights)
    return random_species!(sys, spc, weights)
 end
 
-function random_species!(sys::AbstractSystem, species::AbstractVector{ChemicalSpecies}, weights::AbstractWeights)
+function random_species!(
+      sys::AbstractSystem,
+      species::AbstractVector{ChemicalSpecies},
+      weights::StatsBase.AbstractWeights
+   )
    for i in 1:length(sys)
       z = sample(species, weights)
       AtomsBase.set_species!(sys, i, z)

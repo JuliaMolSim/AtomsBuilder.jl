@@ -5,9 +5,11 @@ using AtomsSystems
 using LinearAlgebra: norm, I 
 using Reexport
 using StaticArrays: SMatrix, SVector
-using StatsBase: sample, AbstractWeights
+using StatsBase: sample
+import StatsBase
 using Unitful
 
+@reexport using AtomsSystems: rattle_positions!, rattle_positions
 @reexport using StatsBase: AnalyticalWeights, FrequencyWeights, ProbabilityWeights, Weights
 
 export bulk
