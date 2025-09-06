@@ -2,6 +2,7 @@ module AtomsBuilder
 
 import AtomsBase
 using StaticArrays: SMatrix, SVector
+using AtomsSystems
 
 const Mat3{T} = SMatrix{3, 3, T}
 const Vec3{T} = SVector{3, T}

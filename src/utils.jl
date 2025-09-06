@@ -94,6 +94,10 @@ import Base.*
 *(n, at::FlexibleSystem) = repeat(at, n)
 
 
+@deprecate *(sys::CellSystem, n) repeat(sys, n)
+@deprecate *(n, sys::CellSystem) repeat(sys, n)
+
+@deprecate rattle!(sys::CellSystem, r::Union{AbstractFloat, Quantity}) rattle_positions!(sys,r)
 
 """
 ```
@@ -176,6 +180,8 @@ function union(sys1::FlexibleSystem, sys2::FlexibleSystem)
                         cell_vectors = cell_vectors(at), 
                         periodicit = periodicity(at) )
 end
+
+@deprecate union(sys1::CellSystem, sys2::CellSystem) union(sys1, sys2)
 
 """
 `deleteat!(sys::FlexibleSystem, n) -> sys`:

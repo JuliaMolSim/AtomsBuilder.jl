@@ -72,13 +72,16 @@ function bulk(sym::Symbol; cubic=false, pbc=(true, true, true),
         cubic && throw(ArgumentError("cubic=true cannot be selected for $symm lattices"))
         X, C = _bulk_hcp(sym; a, c, T)
     else
-        throw(ArgumentError("Currently bulk not immplemented for symmetry $symm"))
+        throw(ArgumentError("Currently bulk not implemented for symmetry $symm"))
     end
-    Z = Chemistry.atomic_number(sym)
+    #Z = Chemistry.atomic_number(sym)
     nat = length(X)
-    at = _flexible_system( X, fill(Z, nat), C, _convert_pbc(pbc))
+    # at = _flexible_system( X, fill(Z, nat), C, _convert_pbc(pbc))
+    spc = AtomsBase.ChemicalSpecies(sym)
+    at = generic_system( fill(spc, nat), X; cell_vectors=collect(eachrow(C)), periodicity=pbc)
     # I don't remember what this does so I'm commenting it out until I understand 
     # it again ...                         
     # (x !== nothing || y !== nothing || z !== nothing) && rotate!(at, x=x, y=y, z=z)
+    #return at
     return at
 end
