@@ -7,16 +7,22 @@
 This package provides utilities to build atomic structures. At the moment the functionality is limited - see examples below. The intention is that over time this package becomes the de facto standard for generating structures in the JuliaMolSim ecosystem. Contributions are very welcome.
 
 
-## Preliminary Documentation 
+## Functionality List
 
-Currently there are just two exported functions to build materials: 
-* `bulk`
-* `rattle!`
-In addition we overload 
-* `repeat` (with alias `*`)
+The following functions are used to build and manipulate systems
+
+* `bulk` - generate bulk solids
+* `rattle_positions` and `rattle_positions!` - reexports from [AtomsSystems](https://github.com/JuliaMolSim/AtomsSystems.jl)
+* `repeat` - repeating system - reexport from [AtomsSystems](https://github.com/JuliaMolSim/AtomsSystems.jl)
+* `random_species!` - randomize species
+* `load_from_pubchem` - download structures from [PubChem](https://pubchem.ncbi.nlm.nih.gov/)
+
+
+## Example
 
 ```julia
-using AtomsBuilder 
+using AtomsBuilder
+using Unitful
 
 # generate a diamond cubic bulk Si unit cell 
 at1 = bulk(:Si)
@@ -27,18 +33,20 @@ at2 = bulk(:Si, cubic=true)
 @show length(at2)
 
 # repeat the cell 3 times in each coordinate direction
-at3 = at2 * 3
+at3 = repeat(at2, 3)
 @show length(at3)
 
 # repeat the unit cell in only one direction
-at4 = at2 * (3, 1, 1)
+at4 = repeat(at2, (3, 1, 1) )
 @show length(at3)
 
 # create a bulk supercell and then rattle the atoms 
-at5 = rattle!( bulk(:Si, cubic=true) * 3 )
+at5 = rattle_positions( repeat(bulk(:Si, cubic=true), 3), 0.3u"Å" )
+
+random_species!(at5, [:Si, :P], Weights([0.9, 0.1]))
 ```
 
-See `?bulk` and `?rattle!` for more information. 
+For more information look for docstrings.
 
 ## PubChem Interface
 
@@ -50,6 +58,9 @@ using AtomsBuilder
 
 # using trivial name
 load_from_pubchem( "water" )
+
+# same with additional metadata
+load_from_pubchem( "water"; metadata=true )
 
 # using CID
 load_from_pubchem( 887 )
