@@ -10,7 +10,7 @@ import StatsBase
 using Unitful
 
 @reexport using AtomsSystems: rattle_positions!, rattle_positions
-@reexport using StatsBase: AnalyticalWeights, FrequencyWeights, ProbabilityWeights, Weights
+@reexport using StatsBase: FrequencyWeights, ProbabilityWeights, Weights
 
 export bulk
 export rattle! 

@@ -45,10 +45,9 @@ sys = repeat(bulk(:Ti), 3)
 spc = [:Ti, :Al]  # species to sample from
 
 # Create weights for each species
-w = AnalyticalWeights([0.5, 0.5])
 w = FrequencyWeights([1, 3])
 w = ProbabilityWeights([0.2, 0.8])
-w = Weights([0.2, 0.8]) # try to resolve to probabilities
+w = Weights([0.2, 0.8]) # generic weights
 
 random_species!( sys, spc, w )
 ```
