@@ -40,6 +40,38 @@ at5 = rattle!( bulk(:Si, cubic=true) * 3 )
 
 See `?bulk` and `?rattle!` for more information. 
 
+## `AtomsBuilder.Examples`
+
+The `Examples` submodule ships fixture systems that are useful for
+testing, benchmarking, and tuning downstream packages. The API may
+evolve — pin a version if you depend on it.
+
+* `rocksalt(species_a, species_b, n)` — 1:1 rock-salt supercell (NaCl
+  structure) with charges `±1 e_au` attached as a per-atom property.
+* `nacl(n)` — convenience alias for `rocksalt(:Na, :Cl, n)`.
+* `tip3p_water(box)` — cubic box of randomly-placed, randomly-oriented
+  TIP3P water molecules (Bridson Poisson-disk for O placement; charges
+  `q_O = -0.834 e_au`, `q_H = +0.417 e_au`).
+
+```julia
+using AtomsBuilder.Examples, Unitful, UnitfulAtomic
+
+# 64-ion NaCl supercell, perfect lattice
+sys = nacl(2)
+
+# 216-ion NaCl supercell, σ = 0.1 Å Gaussian displacements (~300 K thermal)
+sys = nacl(3; σ = 0.1u"Å", rng = Random.MersenneTwister(0))
+
+# ~58-molecule water box, default density (1 g/cm³), default d_min = 2.7 Å
+sys = tip3p_water(12.0u"Å")
+```
+
+Charges are stored on each `Atom` as a per-atom property under the
+keyword `:charge` by default (extracted via `atom.data[:charge]`).
+Pass `charge_label = :q` (or similar) to use a different key.
+
+See `?rocksalt`, `?nacl`, `?tip3p_water` for full options.
+
 ## PubChem Interface
 
 PubChem interface allows you to download structures from [PubChem](https://pubchem.ncbi.nlm.nih.gov/).
