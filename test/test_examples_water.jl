@@ -33,7 +33,7 @@ end
 
 @testset "tip3p_water — charges (TIP3P values, neutral molecules)" begin
    sys = tip3p_water(12.0u"Å"; rng = MersenneTwister(0))
-   charges = [a.data[:charge] for a in sys]
+   charges = [a[:charge] for a in sys]
    @test charges[1:3:end] == fill(-0.834u"e_au", length(sys) ÷ 3)
    @test charges[2:3:end] == fill(+0.417u"e_au", length(sys) ÷ 3)
    @test charges[3:3:end] == fill(+0.417u"e_au", length(sys) ÷ 3)
@@ -92,6 +92,6 @@ end
 
 @testset "tip3p_water — custom charge_label" begin
    sys = tip3p_water(10.0u"Å"; charge_label = :q, rng = MersenneTwister(0))
-   @test sys[1].data[:q] == -0.834u"e_au"
-   @test sys[2].data[:q] == +0.417u"e_au"
+   @test sys[1][:q] == -0.834u"e_au"
+   @test sys[2][:q] == +0.417u"e_au"
 end

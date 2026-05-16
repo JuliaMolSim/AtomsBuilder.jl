@@ -67,7 +67,16 @@ sys = tip3p_water(12.0u"Å")
 ```
 
 Charges are stored on each `Atom` as a per-atom property under the
-keyword `:charge` by default (extracted via `atom.data[:charge]`).
+keyword `:charge` by default — the property name reserved for net atom
+charge in the [AtomsBase tutorial](https://juliamolsim.github.io/AtomsBase.jl/stable/tutorial/).
+Extract with the standard AtomsBase dictionary-style access:
+
+```julia
+a = sys[1]
+a[:charge]            # 1.0 e_au
+haskey(a, :charge)    # true
+```
+
 Pass `charge_label = :q` (or similar) to use a different key.
 
 See `?rocksalt`, `?nacl`, `?tip3p_water` for full options.

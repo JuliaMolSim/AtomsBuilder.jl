@@ -25,7 +25,7 @@ using LinearAlgebra: norm
    end
 
    # All 64 atoms carry a `:charge` per-atom datum, ±1 e_au, summing to zero.
-   charges = [a.data[:charge] for a in sys]
+   charges = [a[:charge] for a in sys]
    @test all(c -> c == +1.0u"e_au" || c == -1.0u"e_au", charges)
    @test sum(charges) ≈ 0.0u"e_au"
    @test count(==( +1.0u"e_au"), charges) == 32
@@ -45,9 +45,9 @@ end
    @test length(sys) == 8
    # Custom kwarg name flows through.
    for a in sys
-      @test a.data[:q] == +1.0u"e_au" || a.data[:q] == -1.0u"e_au"
+      @test a[:q] == +1.0u"e_au" || a[:q] == -1.0u"e_au"
    end
-   @test sum(a.data[:q] for a in sys) ≈ 0.0u"e_au"
+   @test sum(a[:q] for a in sys) ≈ 0.0u"e_au"
 
    # Cubic box of side 1 · 4.02 Å.
    cv = cell_vectors(sys)
@@ -71,7 +71,7 @@ end
       @test norm(position(sys, i) - position(sys0, i)) > 0.0u"Å"
    end
    # Charges unchanged.
-   @test sum(a.data[:charge] for a in sys) ≈ 0.0u"e_au"
+   @test sum(a[:charge] for a in sys) ≈ 0.0u"e_au"
 end
 
 @testset "rocksalt — rng reproducibility with σ > 0" begin
