@@ -10,5 +10,5 @@ Documentation for [AtomsBuilder](https://github.com/JuliaMolSim/AtomsBuilder.jl)
 ```
 
 ```@autodocs
-Modules = [AtomsBuilder]
+Modules = [AtomsBuilder, AtomsBuilder.Examples]
 ```
