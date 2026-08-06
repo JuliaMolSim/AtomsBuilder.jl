@@ -10,5 +10,6 @@ include("chemistry.jl")
 include("utils.jl")
 include("bulk.jl")
 include("pubchem.jl")
+include("examples/Examples.jl")
 
 end
